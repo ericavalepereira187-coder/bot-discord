@@ -1,0 +1,306 @@
+const {
+Client,
+GatewayIntentBits,
+EmbedBuilder,
+ButtonBuilder,
+ButtonStyle,
+ActionRowBuilder,
+ChannelType,
+PermissionFlagsBits
+} = require("discord.js");
+
+const fs = require("fs");
+
+const client = new Client({
+intents:[
+GatewayIntentBits.Guilds,
+GatewayIntentBits.GuildMessages,
+GatewayIntentBits.GuildMembers,
+GatewayIntentBits.MessageContent
+]
+});
+
+const TOKEN = "COLOCA_O_TEU_TOKEN_AQUI";
+
+const verifyRole = "1407804800652935328";
+
+const moreiraCategory = "1421409246557507694";
+const pereiraCategory = "1440523926957457481";
+
+const logo = "https://media0.giphy.com/media/3ukaqy58FtBPaiL4HF/giphy.gif";
+
+if(!fs.existsSync("./tickets.json")){
+fs.writeFileSync("./tickets.json", JSON.stringify({count:0}, null, 2));
+}
+
+let data = JSON.parse(fs.readFileSync("./tickets.json"));
+
+function saveTickets(){
+fs.writeFileSync("./tickets.json",JSON.stringify(data,null,2));
+}
+
+client.once("ready",()=>{
+console.log(`Bot online como ${client.user.tag}`);
+});
+
+client.on("messageCreate", async message=>{
+
+if(message.author.bot) return;
+
+console.log("Mensagem:", message.content);
+
+const msg = message.content.toLowerCase();
+
+
+// VERIFY
+if(msg === "!verify"){
+
+const embed = new EmbedBuilder()
+.setTitle("SERVER VERIFICATION")
+.setDescription(`To access the server, please complete the verification.
+
+➦ Click the button below.
+➦ Wait a few seconds for confirmation.
+➦ You will then gain full access.`)
+.setImage(logo)
+.setColor("Green");
+
+const button = new ButtonBuilder()
+.setCustomId("verify")
+.setLabel("Verify")
+.setStyle(ButtonStyle.Success);
+
+const row = new ActionRowBuilder().addComponents(button);
+
+message.channel.send({embeds:[embed],components:[row]});
+}
+
+
+// PRICE
+if(msg === "!price"){
+
+const embed = new EmbedBuilder()
+.setTitle("💰 SERVICE PRICES")
+.setDescription(`Check our services and their prices below!
+
+🎬 **Moreira Edits**
+Solo Tage: 0,50€
+Duo Tage: 1,50€
+
+🖼 **Pereira Thumbs / Wallpapers**
+Free`)
+.setImage(logo)
+.setColor("Gold");
+
+message.channel.send({embeds:[embed]});
+}
+
+
+// BOOST
+if(msg === "!boost"){
+
+const embed = new EmbedBuilder()
+.setTitle("🚀 BOOST THE SERVER")
+.setDescription(`Boost the server and unlock:
+
+💎 Premium FiveM Sound Packs
+📦 Exclusive FiveM Packs
+🎮 Private Scripts
+💬 Booster Chat
+🎁 Future exclusive drops`)
+.setImage(logo)
+.setColor("Purple");
+
+message.channel.send({embeds:[embed]});
+}
+
+
+// PARTNER
+if(msg === "!partner"){
+
+const embed = new EmbedBuilder()
+.setTitle("🤝 PARTNER WITH M&P!")
+.setDescription(`Do you want to boost your community and get exclusive exposure?
+
+💡 Benefits of partnering with M&P Helper:
+🔹 Custom collaborations and promotions
+🔹 Special access to premium resources
+🔹 Priority support for your projects
+
+Click the button below to open a Partnership Ticket and get started!`)
+.setImage(logo)
+.setColor("Blue");
+
+const button = new ButtonBuilder()
+.setCustomId("partner_ticket")
+.setLabel("Open Partnership Ticket")
+.setStyle(ButtonStyle.Primary);
+
+const row = new ActionRowBuilder().addComponents(button);
+
+message.channel.send({embeds:[embed],components:[row]});
+}
+
+
+// STREAMER
+if(msg === "!streamer"){
+
+const embed = new EmbedBuilder()
+.setTitle("🎥 Become a Streamer on Our Server!")
+.setDescription(`Want to stream and grow with our community?
+
+💡 Benefits for streamers:
+🔹 Exclusive access to the server
+🔹 Support from the community to increase your views
+🔹 Get your own Streamer Tag to stand out
+
+Click the button below to open a ticket and start streaming now!`)
+.setImage(logo)
+.setColor("Purple");
+
+const button = new ButtonBuilder()
+.setCustomId("streamer_ticket")
+.setLabel("Open Streamer Ticket")
+.setStyle(ButtonStyle.Primary);
+
+const row = new ActionRowBuilder().addComponents(button);
+
+message.channel.send({embeds:[embed],components:[row]});
+}
+
+
+// TICKETS
+if(msg === "!ticket"){
+
+const embed1 = new EmbedBuilder()
+.setTitle("🎬 Ticket Moreira")
+.setDescription("Click the button below to open a ticket.")
+.setColor("Blue");
+
+const button1 = new ButtonBuilder()
+.setCustomId("ticket_moreira")
+.setLabel("Open Ticket")
+.setStyle(ButtonStyle.Primary);
+
+const row1 = new ActionRowBuilder().addComponents(button1);
+
+await message.channel.send({embeds:[embed1],components:[row1]});
+
+
+const embed2 = new EmbedBuilder()
+.setTitle("🖼 Ticket Pereira")
+.setDescription("Click the button below to open a ticket.")
+.setColor("Green");
+
+const button2 = new ButtonBuilder()
+.setCustomId("ticket_pereira")
+.setLabel("Open Ticket")
+.setStyle(ButtonStyle.Primary);
+
+const row2 = new ActionRowBuilder().addComponents(button2);
+
+message.channel.send({embeds:[embed2],components:[row2]});
+}
+
+});
+
+
+// BUTTONS
+client.on("interactionCreate", async interaction=>{
+
+if(!interaction.isButton()) return;
+
+
+// VERIFY BUTTON
+if(interaction.customId==="verify"){
+
+await interaction.member.roles.add(verifyRole);
+
+interaction.reply({
+content:"✅ You are now verified!",
+ephemeral:true
+});
+
+}
+
+
+// CREATE TICKET
+if(
+interaction.customId==="ticket_moreira" ||
+interaction.customId==="ticket_pereira" ||
+interaction.customId==="partner_ticket" ||
+interaction.customId==="streamer_ticket"
+){
+
+data.count++
+saveTickets()
+
+let category = moreiraCategory
+let name = `ticket-${data.count}`
+
+if(interaction.customId==="ticket_pereira"){
+category = pereiraCategory
+name = `pereira-${data.count}`
+}
+
+if(interaction.customId==="partner_ticket"){
+category = pereiraCategory
+name = `partner-${data.count}`
+}
+
+if(interaction.customId==="streamer_ticket"){
+category = pereiraCategory
+name = `streamer-${data.count}`
+}
+
+const channel = await interaction.guild.channels.create({
+name:name,
+type:ChannelType.GuildText,
+parent:category,
+permissionOverwrites:[
+{
+id:interaction.guild.id,
+deny:[PermissionFlagsBits.ViewChannel]
+},
+{
+id:interaction.user.id,
+allow:[PermissionFlagsBits.ViewChannel,PermissionFlagsBits.SendMessages]
+}
+]
+})
+
+const close = new ButtonBuilder()
+.setCustomId("close_ticket")
+.setLabel("Close Ticket")
+.setStyle(ButtonStyle.Danger)
+
+const row = new ActionRowBuilder().addComponents(close)
+
+channel.send({
+content:`Ticket opened by ${interaction.user}`,
+components:[row]
+})
+
+interaction.reply({
+content:`Ticket created: ${channel}`,
+ephemeral:true
+})
+
+}
+
+
+// CLOSE TICKET
+if(interaction.customId==="close_ticket"){
+
+interaction.reply("Closing ticket in 5 seconds...")
+
+setTimeout(()=>{
+interaction.channel.delete()
+},5000)
+
+}
+
+})
+
+client.login("MTQ4MTEwMjgwMjEwNDIyMTg1Nw.Gvsi_F.vBCx-EpHhL925_G1htTTgg55eJ77urmsrXQDMM");
+
