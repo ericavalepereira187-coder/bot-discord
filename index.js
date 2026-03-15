@@ -1,26 +1,24 @@
 const {
-Client,
-GatewayIntentBits,
-EmbedBuilder,
-ButtonBuilder,
-ButtonStyle,
-ActionRowBuilder,
-ChannelType,
-PermissionFlagsBits
+  Client,
+  GatewayIntentBits,
+  EmbedBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ActionRowBuilder,
+  ChannelType,
+  PermissionFlagsBits
 } = require("discord.js");
 
 const fs = require("fs");
 
 const client = new Client({
-intents:[
-GatewayIntentBits.Guilds,
-GatewayIntentBits.GuildMessages,
-GatewayIntentBits.GuildMembers,
-GatewayIntentBits.MessageContent
-]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.MessageContent
+  ]
 });
-
-const TOKEN = "COLOCA_O_TEU_TOKEN_AQUI";
 
 const verifyRole = "1407804800652935328";
 
@@ -29,59 +27,52 @@ const pereiraCategory = "1440523926957457481";
 
 const logo = "https://media0.giphy.com/media/3ukaqy58FtBPaiL4HF/giphy.gif";
 
-if(!fs.existsSync("./tickets.json")){
-fs.writeFileSync("./tickets.json", JSON.stringify({count:0}, null, 2));
+if (!fs.existsSync("./tickets.json")) {
+  fs.writeFileSync("./tickets.json", JSON.stringify({ count: 0 }, null, 2));
 }
 
 let data = JSON.parse(fs.readFileSync("./tickets.json"));
 
-function saveTickets(){
-fs.writeFileSync("./tickets.json",JSON.stringify(data,null,2));
+function saveTickets() {
+  fs.writeFileSync("./tickets.json", JSON.stringify(data, null, 2));
 }
 
-client.once("ready",()=>{
-console.log(`Bot online como ${client.user.tag}`);
+client.once("ready", () => {
+  console.log(`Bot online como ${client.user.tag}`);
 });
 
-client.on("messageCreate", async message=>{
+client.on("messageCreate", async message => {
+  if (message.author.bot) return;
 
-if(message.author.bot) return;
+  const msg = message.content.toLowerCase();
 
-console.log("Mensagem:", message.content);
-
-const msg = message.content.toLowerCase();
-
-
-// VERIFY
-if(msg === "!verify"){
-
-const embed = new EmbedBuilder()
-.setTitle("SERVER VERIFICATION")
-.setDescription(`To access the server, please complete the verification.
+  // VERIFY
+  if (msg === "!verify") {
+    const embed = new EmbedBuilder()
+      .setTitle("SERVER VERIFICATION")
+      .setDescription(`To access the server, please complete the verification.
 
 ➦ Click the button below.
 ➦ Wait a few seconds for confirmation.
 ➦ You will then gain full access.`)
-.setImage(logo)
-.setColor("Green");
+      .setImage(logo)
+      .setColor("Green");
 
-const button = new ButtonBuilder()
-.setCustomId("verify")
-.setLabel("Verify")
-.setStyle(ButtonStyle.Success);
+    const button = new ButtonBuilder()
+      .setCustomId("verify")
+      .setLabel("Verify")
+      .setStyle(ButtonStyle.Success);
 
-const row = new ActionRowBuilder().addComponents(button);
+    const row = new ActionRowBuilder().addComponents(button);
 
-message.channel.send({embeds:[embed],components:[row]});
-}
+    message.channel.send({ embeds: [embed], components: [row] });
+  }
 
-
-// PRICE
-if(msg === "!price"){
-
-const embed = new EmbedBuilder()
-.setTitle("💰 SERVICE PRICES")
-.setDescription(`Check our services and their prices below!
+  // PRICE
+  if (msg === "!price") {
+    const embed = new EmbedBuilder()
+      .setTitle("💰 SERVICE PRICES")
+      .setDescription(`Check our services and their prices below!
 
 🎬 **Moreira Edits**
 Solo Tage: 0,50€
@@ -89,38 +80,34 @@ Duo Tage: 1,50€
 
 🖼 **Pereira Thumbs / Wallpapers**
 Free`)
-.setImage(logo)
-.setColor("Gold");
+      .setImage(logo)
+      .setColor("Gold");
 
-message.channel.send({embeds:[embed]});
-}
+    message.channel.send({ embeds: [embed] });
+  }
 
-
-// BOOST
-if(msg === "!boost"){
-
-const embed = new EmbedBuilder()
-.setTitle("🚀 BOOST THE SERVER")
-.setDescription(`Boost the server and unlock:
+  // BOOST
+  if (msg === "!boost") {
+    const embed = new EmbedBuilder()
+      .setTitle("🚀 BOOST THE SERVER")
+      .setDescription(`Boost the server and unlock:
 
 💎 Premium FiveM Sound Packs
 📦 Exclusive FiveM Packs
 🎮 Private Scripts
 💬 Booster Chat
 🎁 Future exclusive drops`)
-.setImage(logo)
-.setColor("Purple");
+      .setImage(logo)
+      .setColor("Purple");
 
-message.channel.send({embeds:[embed]});
-}
+    message.channel.send({ embeds: [embed] });
+  }
 
-
-// PARTNER
-if(msg === "!partner"){
-
-const embed = new EmbedBuilder()
-.setTitle("🤝 PARTNER WITH M&P!")
-.setDescription(`Do you want to boost your community and get exclusive exposure?
+  // PARTNER
+  if (msg === "!partner") {
+    const embed = new EmbedBuilder()
+      .setTitle("🤝 PARTNER WITH M&P!")
+      .setDescription(`Do you want to boost your community and get exclusive exposure?
 
 💡 Benefits of partnering with M&P Helper:
 🔹 Custom collaborations and promotions
@@ -128,26 +115,24 @@ const embed = new EmbedBuilder()
 🔹 Priority support for your projects
 
 Click the button below to open a Partnership Ticket and get started!`)
-.setImage(logo)
-.setColor("Blue");
+      .setImage(logo)
+      .setColor("Blue");
 
-const button = new ButtonBuilder()
-.setCustomId("partner_ticket")
-.setLabel("Open Partnership Ticket")
-.setStyle(ButtonStyle.Primary);
+    const button = new ButtonBuilder()
+      .setCustomId("partner_ticket")
+      .setLabel("Open Partnership Ticket")
+      .setStyle(ButtonStyle.Primary);
 
-const row = new ActionRowBuilder().addComponents(button);
+    const row = new ActionRowBuilder().addComponents(button);
 
-message.channel.send({embeds:[embed],components:[row]});
-}
+    message.channel.send({ embeds: [embed], components: [row] });
+  }
 
-
-// STREAMER
-if(msg === "!streamer"){
-
-const embed = new EmbedBuilder()
-.setTitle("🎥 Become a Streamer on Our Server!")
-.setDescription(`Want to stream and grow with our community?
+  // STREAMER
+  if (msg === "!streamer") {
+    const embed = new EmbedBuilder()
+      .setTitle("🎥 Become a Streamer on Our Server!")
+      .setDescription(`Want to stream and grow with our community?
 
 💡 Benefits for streamers:
 🔹 Exclusive access to the server
@@ -155,150 +140,137 @@ const embed = new EmbedBuilder()
 🔹 Get your own Streamer Tag to stand out
 
 Click the button below to open a ticket and start streaming now!`)
-.setImage(logo)
-.setColor("Purple");
+      .setImage(logo)
+      .setColor("Purple");
 
-const button = new ButtonBuilder()
-.setCustomId("streamer_ticket")
-.setLabel("Open Streamer Ticket")
-.setStyle(ButtonStyle.Primary);
+    const button = new ButtonBuilder()
+      .setCustomId("streamer_ticket")
+      .setLabel("Open Streamer Ticket")
+      .setStyle(ButtonStyle.Primary);
 
-const row = new ActionRowBuilder().addComponents(button);
+    const row = new ActionRowBuilder().addComponents(button);
 
-message.channel.send({embeds:[embed],components:[row]});
-}
+    message.channel.send({ embeds: [embed], components: [row] });
+  }
 
+  // TICKETS
+  if (msg === "!ticket") {
+    const embed1 = new EmbedBuilder()
+      .setTitle("🎬 Ticket Moreira")
+      .setDescription("Click the button below to open a ticket.")
+      .setColor("Blue");
 
-// TICKETS
-if(msg === "!ticket"){
+    const button1 = new ButtonBuilder()
+      .setCustomId("ticket_moreira")
+      .setLabel("Open Ticket")
+      .setStyle(ButtonStyle.Primary);
 
-const embed1 = new EmbedBuilder()
-.setTitle("🎬 Ticket Moreira")
-.setDescription("Click the button below to open a ticket.")
-.setColor("Blue");
+    const row1 = new ActionRowBuilder().addComponents(button1);
 
-const button1 = new ButtonBuilder()
-.setCustomId("ticket_moreira")
-.setLabel("Open Ticket")
-.setStyle(ButtonStyle.Primary);
+    await message.channel.send({ embeds: [embed1], components: [row1] });
 
-const row1 = new ActionRowBuilder().addComponents(button1);
+    const embed2 = new EmbedBuilder()
+      .setTitle("🖼 Ticket Pereira")
+      .setDescription("Click the button below to open a ticket.")
+      .setColor("Green");
 
-await message.channel.send({embeds:[embed1],components:[row1]});
+    const button2 = new ButtonBuilder()
+      .setCustomId("ticket_pereira")
+      .setLabel("Open Ticket")
+      .setStyle(ButtonStyle.Primary);
 
+    const row2 = new ActionRowBuilder().addComponents(button2);
 
-const embed2 = new EmbedBuilder()
-.setTitle("🖼 Ticket Pereira")
-.setDescription("Click the button below to open a ticket.")
-.setColor("Green");
-
-const button2 = new ButtonBuilder()
-.setCustomId("ticket_pereira")
-.setLabel("Open Ticket")
-.setStyle(ButtonStyle.Primary);
-
-const row2 = new ActionRowBuilder().addComponents(button2);
-
-message.channel.send({embeds:[embed2],components:[row2]});
-}
-
+    message.channel.send({ embeds: [embed2], components: [row2] });
+  }
 });
-
 
 // BUTTONS
-client.on("interactionCreate", async interaction=>{
+client.on("interactionCreate", async interaction => {
+  if (!interaction.isButton()) return;
 
-if(!interaction.isButton()) return;
+  // VERIFY BUTTON
+  if (interaction.customId === "verify") {
+    await interaction.member.roles.add(verifyRole);
 
+    interaction.reply({
+      content: "✅ You are now verified!",
+      ephemeral: true
+    });
+  }
 
-// VERIFY BUTTON
-if(interaction.customId==="verify"){
+  // CREATE TICKET
+  if (
+    interaction.customId === "ticket_moreira" ||
+    interaction.customId === "ticket_pereira" ||
+    interaction.customId === "partner_ticket" ||
+    interaction.customId === "streamer_ticket"
+  ) {
+    data.count++;
+    saveTickets();
 
-await interaction.member.roles.add(verifyRole);
+    let category = moreiraCategory;
+    let name = `ticket-${data.count}`;
 
-interaction.reply({
-content:"✅ You are now verified!",
-ephemeral:true
-});
+    if (interaction.customId === "ticket_pereira") {
+      category = pereiraCategory;
+      name = `pereira-${data.count}`;
+    }
 
-}
+    if (interaction.customId === "partner_ticket") {
+      category = pereiraCategory;
+      name = `partner-${data.count}`;
+    }
 
+    if (interaction.customId === "streamer_ticket") {
+      category = pereiraCategory;
+      name = `streamer-${data.count}`;
+    }
 
-// CREATE TICKET
-if(
-interaction.customId==="ticket_moreira" ||
-interaction.customId==="ticket_pereira" ||
-interaction.customId==="partner_ticket" ||
-interaction.customId==="streamer_ticket"
-){
+    const channel = await interaction.guild.channels.create({
+      name: name,
+      type: ChannelType.GuildText,
+      parent: category,
+      permissionOverwrites: [
+        {
+          id: interaction.guild.id,
+          deny: [PermissionFlagsBits.ViewChannel]
+        },
+        {
+          id: interaction.user.id,
+          allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+        }
+      ]
+    });
 
-data.count++
-saveTickets()
+    const close = new ButtonBuilder()
+      .setCustomId("close_ticket")
+      .setLabel("Close Ticket")
+      .setStyle(ButtonStyle.Danger);
 
-let category = moreiraCategory
-let name = `ticket-${data.count}`
+    const row = new ActionRowBuilder().addComponents(close);
 
-if(interaction.customId==="ticket_pereira"){
-category = pereiraCategory
-name = `pereira-${data.count}`
-}
+    channel.send({
+      content: `Ticket opened by ${interaction.user}`,
+      components: [row]
+    });
 
-if(interaction.customId==="partner_ticket"){
-category = pereiraCategory
-name = `partner-${data.count}`
-}
+    interaction.reply({
+      content: `Ticket created: ${channel}`,
+      ephemeral: true
+    });
+  }
 
-if(interaction.customId==="streamer_ticket"){
-category = pereiraCategory
-name = `streamer-${data.count}`
-}
+  // CLOSE TICKET
+  if (interaction.customId === "close_ticket") {
+    interaction.reply("Closing ticket in 5 seconds...");
 
-const channel = await interaction.guild.channels.create({
-name:name,
-type:ChannelType.GuildText,
-parent:category,
-permissionOverwrites:[
-{
-id:interaction.guild.id,
-deny:[PermissionFlagsBits.ViewChannel]
-},
-{
-id:interaction.user.id,
-allow:[PermissionFlagsBits.ViewChannel,PermissionFlagsBits.SendMessages]
-}
-]
-})
+    setTimeout(() => {
+      interaction.channel.delete();
+    }, 5000);
+  }
+}); // <-- fecha listener interactionCreate
 
-const close = new ButtonBuilder()
-.setCustomId("close_ticket")
-.setLabel("Close Ticket")
-.setStyle(ButtonStyle.Danger)
-
-const row = new ActionRowBuilder().addComponents(close)
-
-channel.send({
-content:`Ticket opened by ${interaction.user}`,
-components:[row]
-})
-
-interaction.reply({
-content:`Ticket created: ${channel}`,
-ephemeral:true
-})
-
-}
-
-
-// CLOSE TICKET
-if(interaction.customId==="close_ticket"){
-
-interaction.reply("Closing ticket in 5 seconds...")
-
-setTimeout(()=>{
-interaction.channel.delete()
-},5000)
-
-}
-
+// LOGIN
 const TOKEN = process.env.DISCORD_TOKEN;
 client.login(TOKEN);
