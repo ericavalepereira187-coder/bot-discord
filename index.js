@@ -303,4 +303,3 @@ interaction.channel.delete()
 })
 
 client.login("MTQ4MTEwMjgwMjEwNDIyMTg1Nw.Gvsi_F.vBCx-EpHhL925_G1htTTgg55eJ77urmsrXQDMM");
-
