@@ -91,10 +91,10 @@ client.on("messageCreate", async message => {
   // ===== PARTNER =====
  if (msg === "!partner") {
   const embed = new EmbedBuilder()
-    .setTitle("🤝 PARTNER WITH M&P!")
+    .setTitle("🤝 PARTNER WITH MPA!")
     .setDescription(`Do you want to boost your community and get exclusive exposure?
 
-💡 Benefits of partnering with M&P Helper:
+💡 Benefits of partnering with MPA:
 🔹 Custom collaborations and promotions
 🔹 Special access to premium resources
 🔹 Priority support for your projects
