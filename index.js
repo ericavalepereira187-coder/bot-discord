@@ -179,4 +179,3 @@ client.on("interactionCreate", async interaction => {
 const TOKEN = process.env.DISCORD_TOKEN;
 client.login(TOKEN);
 
-// update
