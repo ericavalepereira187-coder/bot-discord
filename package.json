@@ -1,17 +1,11 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "Meu bot do Discord",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "discord.js": "^14.25.1",
-    "node-schedule": "^2.1.1"
+    "discord.js": "^14.0.0"
   }
 }
