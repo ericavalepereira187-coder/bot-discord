@@ -24,7 +24,7 @@ const verifyRole = "1407804800652935328";
 
 const moreiraCategory = "1421409246557507694";
 const pereiraCategory = "1440523926957457481";
-const apuliaCategory = "1485779055856062564";
+const apuliaCategory = "1485779490914304081";
 
 const logo = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOThuc3o2Z3F1bmphdDk0eDJiajNsZ3hiZzFuNXpsYjI1bjhqZ2JyeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/q74nh3Qlfo18oggky3/giphy.gif";
 
@@ -83,10 +83,9 @@ client.on("messageCreate", async message => {
 
     await message.channel.send({ embeds: [embed2], components: [row2] });
 
-    // APULIA 👇 (É AQUI QUE ENTRA)
     const embed3 = new EmbedBuilder()
       .setTitle("🌊 Ticket Apulia")
-      .setDescription("Click the button below to open a ticket.")
+      .setDescription("Open Ticket")
       .setColor("Aqua");
 
     const button3 = new ButtonBuilder()
@@ -107,7 +106,7 @@ client.on("interactionCreate", async interaction => {
   if (
     interaction.customId === "ticket_moreira" ||
     interaction.customId === "ticket_pereira" ||
-    interaction.customId === "ticket_apulia"
+    interaction.customId === "ticket_apulia"  ||
   ) {
     data.count++;
     saveTickets();
