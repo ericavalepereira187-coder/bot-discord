@@ -106,7 +106,7 @@ client.on("interactionCreate", async interaction => {
   if (
     interaction.customId === "ticket_moreira" ||
     interaction.customId === "ticket_pereira" ||
-    interaction.customId === "ticket_apulia"  ||
+    interaction.customId === "ticket_apulia"  
   ) {
     data.count++;
     saveTickets();
