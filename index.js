@@ -20,18 +20,20 @@ const client = new Client({
   ]
 });
 
-// IDS DAS CATEGORIAS
+// ROLES & CATEGORIES
+const verifyRole = "1407804800652935328";
 const moreiraCategory = "1421409246557507694";
 const pereiraCategory = "1440523926957457481";
-const apuliaCategory = "1485779490914304081";
+const apuliaCategory = "1485779490914304081"; // ✔️ CORRIGIDO
+
+// LOGO
+const logo = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3RxcTZkMDJ1dm41dGdndjlyc2htMndhamp6eW10MWZsazR0YnR3NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/q74nh3Qlfo18oggky3/giphy.gif";
 
 // FILE
 if (!fs.existsSync("./tickets.json")) {
   fs.writeFileSync("./tickets.json", JSON.stringify({ count: 0 }, null, 2));
 }
-
 let data = JSON.parse(fs.readFileSync("./tickets.json"));
-
 function saveTickets() {
   fs.writeFileSync("./tickets.json", JSON.stringify(data, null, 2));
 }
@@ -41,78 +43,142 @@ client.once("ready", () => {
   console.log(`Bot online como ${client.user.tag}`);
 });
 
-// COMANDO
+// MESSAGES
 client.on("messageCreate", async message => {
   if (message.author.bot) return;
+  const msg = message.content.toLowerCase();
 
-  if (message.content.toLowerCase() === "!ticket") {
+  // ===== VERIFY =====
+  if (msg === "!verify") {
+    const embed = new EmbedBuilder()
+      .setTitle("✅ SERVER VERIFICATION")
+      .setDescription(
+        "To access the server, please complete the verification.\n\n" +
+        "➡ Click the button below.\n" +
+        "➡ Wait a few seconds for confirmation.\n" +
+        "➡ You will then gain full access."
+      )
+      .setColor("Green")
+      .setImage(logo);
 
-    // MOREIRA
-    const embed1 = new EmbedBuilder()
-      .setTitle("🎬 Ticket Moreira")
-      .setDescription("Click the button below to open a ticket.")
-      .setColor("Blue");
+    const button = new ButtonBuilder()
+      .setCustomId("verify_button")
+      .setLabel("Verify")
+      .setStyle(ButtonStyle.Success);
 
-    const button1 = new ButtonBuilder()
-      .setCustomId("ticket_moreira")
-      .setLabel("Open Ticket")
+    const row = new ActionRowBuilder().addComponents(button);
+
+    return message.channel.send({ embeds: [embed], components: [row] });
+  }
+
+  // ===== BOOST =====
+  if (msg === "!boost") {
+    const embed = new EmbedBuilder()
+      .setTitle("🚀 BOOST THE SERVER")
+      .setDescription(`Boost the server and unlock:
+
+💎 Premium FiveM Sound Packs
+📦 Exclusive FiveM Packs
+🎮 Private Scripts
+💬 Booster Chat
+🎁 Future exclusive drops`)
+      .setColor("Purple")
+      .setImage(logo);
+
+    return message.channel.send({ embeds: [embed] });
+  }
+
+  // ===== PARTNER =====
+  if (msg === "!partner") {
+    const embed = new EmbedBuilder()
+      .setTitle("🤝 PARTNER WITH M&P!")
+      .setDescription(`Click below to open a partnership ticket!`)
+      .setColor("Blue")
+      .setImage(logo);
+
+    const button = new ButtonBuilder()
+      .setCustomId("partner_ticket")
+      .setLabel("Open Partnership Ticket")
       .setStyle(ButtonStyle.Primary);
 
-    const row1 = new ActionRowBuilder().addComponents(button1);
+    const row = new ActionRowBuilder().addComponents(button);
 
-    await message.channel.send({ embeds: [embed1], components: [row1] });
+    return message.channel.send({ embeds: [embed], components: [row] });
+  }
 
-    // PEREIRA
-    const embed2 = new EmbedBuilder()
-      .setTitle("🖼 Ticket Pereira")
-      .setDescription("Click the button below to open a ticket.")
-      .setColor("Green");
+  // ===== STREAMER =====
+  if (msg === "!streamer") {
+    const embed = new EmbedBuilder()
+      .setTitle("🎥 Become a Streamer")
+      .setDescription(`Click below to open a streamer ticket!`)
+      .setColor("Purple")
+      .setImage(logo);
 
-    const button2 = new ButtonBuilder()
-      .setCustomId("ticket_pereira")
-      .setLabel("Open Ticket")
+    const button = new ButtonBuilder()
+      .setCustomId("streamer_ticket")
+      .setLabel("Open Streamer Ticket")
       .setStyle(ButtonStyle.Primary);
 
-    const row2 = new ActionRowBuilder().addComponents(button2);
+    const row = new ActionRowBuilder().addComponents(button);
 
-    await message.channel.send({ embeds: [embed2], components: [row2] });
+    return message.channel.send({ embeds: [embed], components: [row] });
+  }
 
-    // APULIA
-    const embed3 = new EmbedBuilder()
-      .setTitle("🌊 Ticket Apulia")
-      .setDescription("Click the button below to open a ticket.")
-      .setColor("Aqua");
+  // ===== TICKETS =====
+  if (msg === "!ticket") {
 
-    const button3 = new ButtonBuilder()
-      .setCustomId("ticket_apulia")
-      .setLabel("Open Ticket")
-      .setStyle(ButtonStyle.Primary);
+    const createPanel = async (title, id, color) => {
+      const embed = new EmbedBuilder()
+        .setTitle(title)
+        .setDescription("Click the button below to open a ticket.")
+        .setColor(color);
 
-    const row3 = new ActionRowBuilder().addComponents(button3);
+      const button = new ButtonBuilder()
+        .setCustomId(id)
+        .setLabel("Open Ticket")
+        .setStyle(ButtonStyle.Primary);
 
-    await message.channel.send({ embeds: [embed3], components: [row3] });
+      const row = new ActionRowBuilder().addComponents(button);
+
+      await message.channel.send({ embeds: [embed], components: [row] });
+    };
+
+    await createPanel("🎬 Ticket Moreira", "ticket_moreira", "Blue");
+    await createPanel("🖼 Ticket Pereira", "ticket_pereira", "Green");
+    await createPanel("🌊 Ticket Apulia", "ticket_apulia", "Red");
   }
 });
 
-// BOTÕES
+// BUTTONS
 client.on("interactionCreate", async interaction => {
   if (!interaction.isButton()) return;
 
+  // VERIFY
+  if (interaction.customId === "verify_button") {
+    const role = interaction.guild.roles.cache.get(verifyRole);
+    if (!role) {
+      return interaction.reply({ content: "Erro: cargo não encontrado.", ephemeral: true });
+    }
+
+    await interaction.member.roles.add(role);
+
+    return interaction.reply({
+      content: "✅ Verificado com sucesso!",
+      ephemeral: true
+    });
+  }
+
+  // CREATE TICKETS
   if (
-    interaction.customId === "ticket_moreira" ||
-    interaction.customId === "ticket_pereira" ||
-    interaction.customId === "ticket_apulia"
+    interaction.customId.includes("ticket") ||
+    interaction.customId === "partner_ticket" ||
+    interaction.customId === "streamer_ticket"
   ) {
     data.count++;
     saveTickets();
 
-    let category;
-    let name;
-
-    if (interaction.customId === "ticket_moreira") {
-      category = moreiraCategory;
-      name = `moreira-${data.count}`;
-    }
+    let category = moreiraCategory;
+    let name = `ticket-${data.count}`;
 
     if (interaction.customId === "ticket_pereira") {
       category = pereiraCategory;
@@ -122,6 +188,16 @@ client.on("interactionCreate", async interaction => {
     if (interaction.customId === "ticket_apulia") {
       category = apuliaCategory;
       name = `apulia-${data.count}`;
+    }
+
+    if (interaction.customId === "partner_ticket") {
+      category = pereiraCategory;
+      name = `partner-${data.count}`;
+    }
+
+    if (interaction.customId === "streamer_ticket") {
+      category = pereiraCategory;
+      name = `streamer-${data.count}`;
     }
 
     const channel = await interaction.guild.channels.create({
@@ -155,15 +231,15 @@ client.on("interactionCreate", async interaction => {
       components: [row]
     });
 
-    await interaction.reply({
+    return interaction.reply({
       content: `Ticket created: ${channel}`,
       ephemeral: true
     });
   }
 
+  // CLOSE
   if (interaction.customId === "close_ticket") {
     await interaction.reply("Closing ticket in 5 seconds...");
-
     setTimeout(() => {
       interaction.channel.delete();
     }, 5000);
