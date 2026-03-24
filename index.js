@@ -89,39 +89,50 @@ client.on("messageCreate", async message => {
   }
 
   // ===== PARTNER =====
-  if (msg === "!partner") {
-    const embed = new EmbedBuilder()
-      .setTitle("🤝 PARTNER WITH MPA!")
-      .setDescription(`Click below to open a partnership ticket!`)
-      .setColor("Blue");
+ if (msg === "!partner") {
+  const embed = new EmbedBuilder()
+    .setTitle("🤝 PARTNER WITH M&P!")
+    .setDescription(`Do you want to boost your community and get exclusive exposure?
 
-    const button = new ButtonBuilder()
-      .setCustomId("partner_ticket")
-      .setLabel("Open Partnership Ticket")
-      .setStyle(ButtonStyle.Primary);
+💡 Benefits of partnering with M&P Helper:
+🔹 Custom collaborations and promotions
+🔹 Special access to premium resources
+🔹 Priority support for your projects
 
-    const row = new ActionRowBuilder().addComponents(button);
+Click the button below to open a Partnership Ticket and get started!`)
+    .setColor("Blue");
 
-    return message.channel.send({ embeds: [embed], components: [row] });
-  }
+  const button = new ButtonBuilder()
+    .setCustomId("partner_ticket")
+    .setLabel("Open Partnership Ticket")
+    .setStyle(ButtonStyle.Primary);
+
+  const row = new ActionRowBuilder().addComponents(button);
+  message.channel.send({ embeds: [embed], components: [row] });
+}
 
   // ===== STREAMER =====
   if (msg === "!streamer") {
-    const embed = new EmbedBuilder()
-      .setTitle("🎥 Become a Streamer")
-      .setDescription(`Click below to open a streamer ticket!`)
-      .setColor("Purple");
+  const embed = new EmbedBuilder()
+    .setTitle("🎥 Become a Streamer on Our Server!")
+    .setDescription(`Want to stream and grow with our community?
 
-    const button = new ButtonBuilder()
-      .setCustomId("streamer_ticket")
-      .setLabel("Open Streamer Ticket")
-      .setStyle(ButtonStyle.Primary);
+💡 Benefits for streamers:
+🔹 Exclusive access to the server
+🔹 Support from the community to increase your views
+🔹 Get your own Streamer Tag to stand out
 
-    const row = new ActionRowBuilder().addComponents(button);
+Click the button below to open a ticket and start streaming now!`)
+    .setColor("Purple");
 
-    return message.channel.send({ embeds: [embed], components: [row] });
-  }
+  const button = new ButtonBuilder()
+    .setCustomId("streamer_ticket")
+    .setLabel("Open Streamer Ticket")
+    .setStyle(ButtonStyle.Primary);
 
+  const row = new ActionRowBuilder().addComponents(button);
+  message.channel.send({ embeds: [embed], components: [row] });
+}
   // ===== TICKETS =====
   if (msg === "!ticket") {
 
