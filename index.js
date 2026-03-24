@@ -91,10 +91,9 @@ client.on("messageCreate", async message => {
   // ===== PARTNER =====
   if (msg === "!partner") {
     const embed = new EmbedBuilder()
-      .setTitle("🤝 PARTNER WITH M&P!")
+      .setTitle("🤝 PARTNER WITH MPA!")
       .setDescription(`Click below to open a partnership ticket!`)
-      .setColor("Blue")
-      .setImage(logo);
+      .setColor("Blue");
 
     const button = new ButtonBuilder()
       .setCustomId("partner_ticket")
@@ -111,8 +110,7 @@ client.on("messageCreate", async message => {
     const embed = new EmbedBuilder()
       .setTitle("🎥 Become a Streamer")
       .setDescription(`Click below to open a streamer ticket!`)
-      .setColor("Purple")
-      .setImage(logo);
+      .setColor("Purple");
 
     const button = new ButtonBuilder()
       .setCustomId("streamer_ticket")
