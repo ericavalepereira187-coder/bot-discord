@@ -20,13 +20,10 @@ const client = new Client({
   ]
 });
 
-const verifyRole = "1407804800652935328";
-
+// IDS DAS CATEGORIAS
 const moreiraCategory = "1421409246557507694";
 const pereiraCategory = "1440523926957457481";
 const apuliaCategory = "1485779490914304081";
-
-const logo = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOThuc3o2Z3F1bmphdDk0eDJiajNsZ3hiZzFuNXpsYjI1bjhqZ2JyeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/q74nh3Qlfo18oggky3/giphy.gif";
 
 // FILE
 if (!fs.existsSync("./tickets.json")) {
@@ -44,14 +41,11 @@ client.once("ready", () => {
   console.log(`Bot online como ${client.user.tag}`);
 });
 
-// MESSAGES
+// COMANDO
 client.on("messageCreate", async message => {
   if (message.author.bot) return;
 
-  const msg = message.content.toLowerCase();
-
-  // TICKETS
-  if (msg === "!ticket") {
+  if (message.content.toLowerCase() === "!ticket") {
 
     // MOREIRA
     const embed1 = new EmbedBuilder()
@@ -83,9 +77,10 @@ client.on("messageCreate", async message => {
 
     await message.channel.send({ embeds: [embed2], components: [row2] });
 
+    // APULIA
     const embed3 = new EmbedBuilder()
       .setTitle("🌊 Ticket Apulia")
-      .setDescription("Open Ticket")
+      .setDescription("Click the button below to open a ticket.")
       .setColor("Aqua");
 
     const button3 = new ButtonBuilder()
@@ -95,18 +90,18 @@ client.on("messageCreate", async message => {
 
     const row3 = new ActionRowBuilder().addComponents(button3);
 
-    message.channel.send({ embeds: [embed3], components: [row3] });
+    await message.channel.send({ embeds: [embed3], components: [row3] });
   }
 });
 
-// BUTTONS
+// BOTÕES
 client.on("interactionCreate", async interaction => {
   if (!interaction.isButton()) return;
 
   if (
     interaction.customId === "ticket_moreira" ||
     interaction.customId === "ticket_pereira" ||
-    interaction.customId === "ticket_apulia"  
+    interaction.customId === "ticket_apulia"
   ) {
     data.count++;
     saveTickets();
@@ -155,19 +150,19 @@ client.on("interactionCreate", async interaction => {
 
     const row = new ActionRowBuilder().addComponents(close);
 
-    channel.send({
+    await channel.send({
       content: `Ticket opened by ${interaction.user}`,
       components: [row]
     });
 
-    interaction.reply({
+    await interaction.reply({
       content: `Ticket created: ${channel}`,
       ephemeral: true
     });
   }
 
   if (interaction.customId === "close_ticket") {
-    interaction.reply("Closing ticket in 5 seconds...");
+    await interaction.reply("Closing ticket in 5 seconds...");
 
     setTimeout(() => {
       interaction.channel.delete();
@@ -178,4 +173,3 @@ client.on("interactionCreate", async interaction => {
 // LOGIN
 const TOKEN = process.env.DISCORD_TOKEN;
 client.login(TOKEN);
-
