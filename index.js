@@ -20,21 +20,20 @@ const client = new Client({
   ]
 });
 
-// TOKEN via ENV (GitHub / host)
-const TOKEN = process.env.DISCORD_TOKEN;
-
 const verifyRole = "1407804800652935328";
+
 const moreiraCategory = "1421409246557507694";
 const pereiraCategory = "1440523926957457481";
+const apuliaCategory = "1485779055856062564";
 
-const logo = "https://media0.giphy.com/media/3ukaqy58FtBPaiL4HF/giphy.gif";
+const logo = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOThuc3o2Z3F1bmphdDk0eDJiajNsZ3hiZzFuNXpsYjI1bjhqZ2JyeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/q74nh3Qlfo18oggky3/giphy.gif";
 
-// Sistema de tickets
-let data = { count: 0 };
-
-if (fs.existsSync("./tickets.json")) {
-  data = JSON.parse(fs.readFileSync("./tickets.json"));
+// FILE
+if (!fs.existsSync("./tickets.json")) {
+  fs.writeFileSync("./tickets.json", JSON.stringify({ count: 0 }, null, 2));
 }
+
+let data = JSON.parse(fs.readFileSync("./tickets.json"));
 
 function saveTickets() {
   fs.writeFileSync("./tickets.json", JSON.stringify(data, null, 2));
@@ -45,8 +44,8 @@ client.once("ready", () => {
   console.log(`Bot online como ${client.user.tag}`);
 });
 
-// COMANDOS
-client.on("messageCreate", async (message) => {
+// MESSAGES
+client.on("messageCreate", async message => {
   if (message.author.bot) return;
 
   const msg = message.content.toLowerCase();
@@ -57,9 +56,9 @@ client.on("messageCreate", async (message) => {
       .setTitle("SERVER VERIFICATION")
       .setDescription(`To access the server, please complete the verification.
 
-➦ Click the button below
-➦ Wait a few seconds
-➦ Full access will be granted`)
+➦ Click the button below.
+➦ Wait a few seconds for confirmation.
+➦ You will then gain full access.`)
       .setImage(logo)
       .setColor("Green");
 
@@ -79,11 +78,11 @@ client.on("messageCreate", async (message) => {
       .setTitle("🚀 BOOST THE SERVER")
       .setDescription(`Boost the server and unlock:
 
-💎 Premium FiveM Packs
-📦 Exclusive Content
+💎 Premium FiveM Sound Packs
+📦 Exclusive FiveM Packs
 🎮 Private Scripts
 💬 Booster Chat
-🎁 Future rewards`)
+🎁 Future exclusive drops`)
       .setImage(logo)
       .setColor("Purple");
 
@@ -93,14 +92,15 @@ client.on("messageCreate", async (message) => {
   // PARTNER
   if (msg === "!partner") {
     const embed = new EmbedBuilder()
-      .setTitle("🤝 PARTNER WITH US!")
-      .setDescription(`Want to grow your community?
+      .setTitle("🤝 PARTNER WITH MPA!")
+      .setDescription(`Do you want to boost your community and get exclusive exposure?
 
-🔹 Promotions
-🔹 Exclusive content
-🔹 Priority support
+💡 Benefits of partnering with MPA:
+🔹 Custom collaborations and promotions
+🔹 Special access to premium resources
+🔹 Priority support for your projects
 
-Click below to open a ticket`)
+Click the button below to open a Partnership Ticket and get started!`)
       .setImage(logo)
       .setColor("Blue");
 
@@ -117,14 +117,15 @@ Click below to open a ticket`)
   // STREAMER
   if (msg === "!streamer") {
     const embed = new EmbedBuilder()
-      .setTitle("🎥 Become a Streamer!")
-      .setDescription(`Want to stream with us?
+      .setTitle("🎥 Become a Streamer on Our Server!")
+      .setDescription(`Want to stream and grow with our community?
 
-🔹 Grow your audience
-🔹 Get support
-🔹 Exclusive role
+💡 Benefits for streamers:
+🔹 Exclusive access to the server
+🔹 Support from the community to increase your views
+🔹 Get your own Streamer Tag to stand out
 
-Click below to open a ticket`)
+Click the button below to open a ticket and start streaming now!`)
       .setImage(logo)
       .setColor("Purple");
 
@@ -142,7 +143,7 @@ Click below to open a ticket`)
   if (msg === "!ticket") {
     const embed1 = new EmbedBuilder()
       .setTitle("🎬 Ticket Moreira")
-      .setDescription("Click to open a ticket")
+      .setDescription("Click the button below to open a ticket.")
       .setColor("Blue");
 
     const button1 = new ButtonBuilder()
@@ -156,7 +157,7 @@ Click below to open a ticket`)
 
     const embed2 = new EmbedBuilder()
       .setTitle("🖼 Ticket Pereira")
-      .setDescription("Click to open a ticket")
+      .setDescription("Click the button below to open a ticket.")
       .setColor("Green");
 
     const button2 = new ButtonBuilder()
@@ -166,12 +167,26 @@ Click below to open a ticket`)
 
     const row2 = new ActionRowBuilder().addComponents(button2);
 
-    message.channel.send({ embeds: [embed2], components: [row2] });
+    await message.channel.send({ embeds: [embed2], components: [row2] });
+
+    const embed3 = new EmbedBuilder()
+      .setTitle("🌊 Ticket Apulia")
+      .setDescription("Click the button below to open a ticket.")
+      .setColor("Aqua");
+
+    const button3 = new ButtonBuilder()
+      .setCustomId("ticket_apulia")
+      .setLabel("Open Ticket")
+      .setStyle(ButtonStyle.Primary);
+
+    const row3 = new ActionRowBuilder().addComponents(button3);
+
+    message.channel.send({ embeds: [embed3], components: [row3] });
   }
 });
 
-// BOTÕES
-client.on("interactionCreate", async (interaction) => {
+// BUTTONS
+client.on("interactionCreate", async interaction => {
   if (!interaction.isButton()) return;
 
   // VERIFY
@@ -184,10 +199,11 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 
-  // CRIAR TICKET
+  // CREATE TICKET
   if (
     interaction.customId === "ticket_moreira" ||
     interaction.customId === "ticket_pereira" ||
+    interaction.customId === "ticket_apulia" ||
     interaction.customId === "partner_ticket" ||
     interaction.customId === "streamer_ticket"
   ) {
@@ -202,11 +218,18 @@ client.on("interactionCreate", async (interaction) => {
       name = `pereira-${data.count}`;
     }
 
+    if (interaction.customId === "ticket_apulia") {
+      category = apuliaCategory;
+      name = `apulia-${data.count}`;
+    }
+
     if (interaction.customId === "partner_ticket") {
+      category = pereiraCategory;
       name = `partner-${data.count}`;
     }
 
     if (interaction.customId === "streamer_ticket") {
+      category = pereiraCategory;
       name = `streamer-${data.count}`;
     }
 
@@ -247,7 +270,7 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 
-  // FECHAR TICKET
+  // CLOSE
   if (interaction.customId === "close_ticket") {
     interaction.reply("Closing ticket in 5 seconds...");
 
@@ -258,4 +281,5 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 // LOGIN
+const TOKEN = process.env.DISCORD_TOKEN;
 client.login(TOKEN);
