@@ -50,97 +50,10 @@ client.on("messageCreate", async message => {
 
   const msg = message.content.toLowerCase();
 
-  // VERIFY
-  if (msg === "!verify") {
-    const embed = new EmbedBuilder()
-      .setTitle("SERVER VERIFICATION")
-      .setDescription(`To access the server, please complete the verification.
-
-➦ Click the button below.
-➦ Wait a few seconds for confirmation.
-➦ You will then gain full access.`)
-      .setImage(logo)
-      .setColor("Green");
-
-    const button = new ButtonBuilder()
-      .setCustomId("verify")
-      .setLabel("Verify")
-      .setStyle(ButtonStyle.Success);
-
-    const row = new ActionRowBuilder().addComponents(button);
-
-    message.channel.send({ embeds: [embed], components: [row] });
-  }
-
-  // BOOST
-  if (msg === "!boost") {
-    const embed = new EmbedBuilder()
-      .setTitle("🚀 BOOST THE SERVER")
-      .setDescription(`Boost the server and unlock:
-
-💎 Premium FiveM Sound Packs
-📦 Exclusive FiveM Packs
-🎮 Private Scripts
-💬 Booster Chat
-🎁 Future exclusive drops`)
-      .setImage(logo)
-      .setColor("Purple");
-
-    message.channel.send({ embeds: [embed] });
-  }
-
-  // PARTNER
-  if (msg === "!partner") {
-    const embed = new EmbedBuilder()
-      .setTitle("🤝 PARTNER WITH MPA!")
-      .setDescription(`Do you want to boost your community and get exclusive exposure?
-
-💡 Benefits of partnering with MPA:
-🔹 Custom collaborations and promotions
-🔹 Special access to premium resources
-🔹 Priority support for your projects
-
-Click the button below to open a Partnership Ticket and get started!`)
-      .setImage(logo)
-      .setColor("Blue");
-
-    const button = new ButtonBuilder()
-      .setCustomId("partner_ticket")
-      .setLabel("Open Partnership Ticket")
-      .setStyle(ButtonStyle.Primary);
-
-    const row = new ActionRowBuilder().addComponents(button);
-
-    message.channel.send({ embeds: [embed], components: [row] });
-  }
-
-  // STREAMER
-  if (msg === "!streamer") {
-    const embed = new EmbedBuilder()
-      .setTitle("🎥 Become a Streamer on Our Server!")
-      .setDescription(`Want to stream and grow with our community?
-
-💡 Benefits for streamers:
-🔹 Exclusive access to the server
-🔹 Support from the community to increase your views
-🔹 Get your own Streamer Tag to stand out
-
-Click the button below to open a ticket and start streaming now!`)
-      .setImage(logo)
-      .setColor("Purple");
-
-    const button = new ButtonBuilder()
-      .setCustomId("streamer_ticket")
-      .setLabel("Open Streamer Ticket")
-      .setStyle(ButtonStyle.Primary);
-
-    const row = new ActionRowBuilder().addComponents(button);
-
-    message.channel.send({ embeds: [embed], components: [row] });
-  }
-
   // TICKETS
   if (msg === "!ticket") {
+
+    // MOREIRA
     const embed1 = new EmbedBuilder()
       .setTitle("🎬 Ticket Moreira")
       .setDescription("Click the button below to open a ticket.")
@@ -155,6 +68,7 @@ Click the button below to open a ticket and start streaming now!`)
 
     await message.channel.send({ embeds: [embed1], components: [row1] });
 
+    // PEREIRA
     const embed2 = new EmbedBuilder()
       .setTitle("🖼 Ticket Pereira")
       .setDescription("Click the button below to open a ticket.")
@@ -169,6 +83,7 @@ Click the button below to open a ticket and start streaming now!`)
 
     await message.channel.send({ embeds: [embed2], components: [row2] });
 
+    // APULIA 👇 (É AQUI QUE ENTRA)
     const embed3 = new EmbedBuilder()
       .setTitle("🌊 Ticket Apulia")
       .setDescription("Click the button below to open a ticket.")
@@ -189,29 +104,21 @@ Click the button below to open a ticket and start streaming now!`)
 client.on("interactionCreate", async interaction => {
   if (!interaction.isButton()) return;
 
-  // VERIFY
-  if (interaction.customId === "verify") {
-    await interaction.member.roles.add(verifyRole);
-
-    return interaction.reply({
-      content: "✅ You are now verified!",
-      ephemeral: true
-    });
-  }
-
-  // CREATE TICKET
   if (
     interaction.customId === "ticket_moreira" ||
     interaction.customId === "ticket_pereira" ||
-    interaction.customId === "ticket_apulia" ||
-    interaction.customId === "partner_ticket" ||
-    interaction.customId === "streamer_ticket"
+    interaction.customId === "ticket_apulia"
   ) {
     data.count++;
     saveTickets();
 
-    let category = moreiraCategory;
-    let name = `ticket-${data.count}`;
+    let category;
+    let name;
+
+    if (interaction.customId === "ticket_moreira") {
+      category = moreiraCategory;
+      name = `moreira-${data.count}`;
+    }
 
     if (interaction.customId === "ticket_pereira") {
       category = pereiraCategory;
@@ -221,16 +128,6 @@ client.on("interactionCreate", async interaction => {
     if (interaction.customId === "ticket_apulia") {
       category = apuliaCategory;
       name = `apulia-${data.count}`;
-    }
-
-    if (interaction.customId === "partner_ticket") {
-      category = pereiraCategory;
-      name = `partner-${data.count}`;
-    }
-
-    if (interaction.customId === "streamer_ticket") {
-      category = pereiraCategory;
-      name = `streamer-${data.count}`;
     }
 
     const channel = await interaction.guild.channels.create({
@@ -270,7 +167,6 @@ client.on("interactionCreate", async interaction => {
     });
   }
 
-  // CLOSE
   if (interaction.customId === "close_ticket") {
     interaction.reply("Closing ticket in 5 seconds...");
 
